@@ -4,7 +4,7 @@
 cnt_fail=0
 cnt_ok=0
 mail_sent=false
-i=0
+watch_row=0
 FILE=$1
 EMAIL=$2
 
@@ -25,8 +25,8 @@ fi
 tail -Fn0 $FILE |  \
 while read LINE;
 do
- ((i = `echo $LINE | awk '{print $4}'`))
- if [ $i -gt 10 ];
+ ((watch_row = `echo $LINE | awk '{print $4}'`))
+ if [ $watch_row -gt 10 ];
   then
    ((cnt_fail = cnt_fail + 1))
    if [ $cnt_fail -ge 3 ] && [ ! $mail_sent ];
@@ -36,7 +36,7 @@ do
      #echo "send mail about problem $EMAIL"
      ((cnt_fail = 0))
    fi
-  elif [ $i -le 10 ];
+  elif [ $watch_row -le 10 ];
   then
     ((cnt_fail = 0))
     if [ $mail_sent ];
